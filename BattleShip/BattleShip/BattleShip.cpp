@@ -5,8 +5,9 @@ using namespace std;
 
 const int rows = 10;
 const int elements = 10;
-int maxships = 5;
+int maxShips = 5;
 int matrix[rows][elements];
+
 
 void Clear()
 {
@@ -34,31 +35,86 @@ void Show()
 void SettingShips()
 {
     int s = 0;
-    while (s < maxships)
+    matrix[1][1] = 1;
+    while (s < maxShips)
     {
         int x = rand() % rows;
         int y = rand() % elements;
         if (matrix[x][y] != 1 )
-        {
-            if (matrix[x + 3][y + 3] == 0 && matrix [x-3][y-3] == 0 )
-            {          
-                if (x < 10 && y < 10)
-                {
-                    s++;
-                    matrix[x][y] = 1;
-                }
-            }
+        {    
+             s++;
+             matrix[x][y] = 1;      
         }
     }
 }
 
+int NumberOfShips()
+{
+    int shipsLeft = 0;
+   
+    for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < elements; j++)
+            {
+                if (matrix[i][j] == 1)
+                
+                    shipsLeft++;
+                
+            }
+        }
+    
+    return shipsLeft;
+}
+  void Attacking()
+
+{
+      int x = rand() % rows;
+      int y = rand() % elements;
+
+        if (matrix[x][y] == 1 )
+        {     
+            matrix[x][y] = 2;
+            
+            cout << "You hit a ship at: (" << x << "," << y << ") " << endl;
+        }
+
+        else {  
+           
+            cout <<"You have missed a ship at: (" << x << "," << y << ") " << endl;
+        }
+    
+    
+}
+
 int main()
 {
+    char prompt;
+
     srand(time(NULL));
     Clear();
     Show();
     cout << "=====================================" << endl;
     SettingShips();
+    Show();
+    cout << "=====================================" << endl;
+    while (1)
+    {
+        
+        Attacking();
+        cout << "Number of Ships Left: " << NumberOfShips() << endl;
+        cout << "Do you want to keep going (y/n)?"; cin >> prompt;
+        if (prompt == 'n')
+        {
+            break;
+        }
+
+            if (NumberOfShips() == 0)
+            {
+                break;
+            }
+    }
+
+    cout << "Game Over" << endl;
     Show();
     system("pause");
     return 0;
